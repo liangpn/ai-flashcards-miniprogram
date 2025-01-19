@@ -1,0 +1,47 @@
+<!--index.wxml-->
+<navigation-bar title="知学" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<view class="container">
+  <view class="button-container">
+    <button class="icon-button" bindtap="navigateToCards">
+      <image class="icon" src="../../assets/tabbar/cards_entrance.png" mode="aspectFit"></image>
+      <text>AI 学习卡片</text>
+    </button>
+    <button class="icon-button" bindtap="navigateToFeedback" style="background: #E5D0AC">
+      <image class="icon" src="../../assets/tabbar/suggestion_box.png" mode="aspectFit"></image>
+      <text>意见收集箱</text>
+    </button>
+    <button class="icon-button" bindtap="showSettings">
+      <view class="icon settings-icon">⚙️</view>
+      <text>设置</text>
+    </button>
+  </view>
+</view>
+
+<!-- 自定义设置弹窗 -->
+<view class="settings-dialog {{showSettingsDialog ? 'show' : ''}}">
+  <view class="dialog-mask" bindtap="handleCancel"></view>
+  <view class="dialog-content">
+    <view class="dialog-header">
+      <text>设置</text>
+    </view>
+    <view class="dialog-body">
+      <text class="label">DeepSeek API Key</text>
+      <view class="input-wrapper">
+        <input 
+          type="text"
+          password="{{!showApiKey}}"
+          value="{{tempApiKey}}"
+          placeholder="请输入 API Key"
+          bindinput="handleInput"
+        />
+        <view class="toggle-visibility" bindtap="toggleApiKeyVisibility">
+          <text>{{showApiKey ? '隐藏' : '显示'}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="dialog-footer">
+      <button class="btn cancel" bindtap="handleCancel">取消</button>
+      <button class="btn confirm" bindtap="handleConfirm">确定</button>
+    </view>
+  </view>
+</view>

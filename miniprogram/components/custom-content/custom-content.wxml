@@ -1,0 +1,35 @@
+<view class="custom-content">
+  <textarea
+    class="content-input"
+    placeholder="输入你想学习的内容"
+    value="{{content}}"
+    bindinput="handleContentInput"
+  />
+
+  <view class="card-count">
+    <view class="count-label">
+      <text>卡片数量: {{cardCount}}</text>
+      <text class="count-range">1-100张</text>
+    </view>
+    <slider
+      min="1"
+      max="100"
+      value="{{cardCount}}"
+      bindchange="handleCardCountChange"
+      activeColor="#4CAF50"
+      backgroundColor="#E8E8E8"
+    />
+  </view>
+
+  <button 
+    class="submit-btn {{isLoading || !content ? 'disabled' : ''}}"
+    disabled="{{isLoading || !content}}"
+    bindtap="handleSubmit"
+  >
+    {{isLoading ? '生成中...' : '点击开始学习'}}
+  </button>
+
+  <view wx:if="{{error}}" class="error-msg">
+    {{error}}
+  </view>
+</view> 

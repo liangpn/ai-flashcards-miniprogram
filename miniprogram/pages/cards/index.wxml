@@ -1,0 +1,76 @@
+<navigation-bar 
+  title="AI 学习卡片" 
+  back="{{true}}" 
+  color="black" 
+  background="#FFF"
+  bind:back="handleBack">
+</navigation-bar>
+
+<view class="cards-container">
+  <!-- Tab导航栏 -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'custom' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="custom">
+      <text class="tab-icon">✏️</text>
+      <text class="tab-text">自定义内容</text>
+    </view>
+    <view class="tab-item {{currentTab === 'explore' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="explore">
+      <text class="tab-icon">🔍</text>
+      <text class="tab-text">探索主题</text>
+    </view>
+    <view class="tab-item {{currentTab === 'review' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="review">
+      <text class="tab-icon">📚</text>
+      <text class="tab-text">复习</text>
+    </view>
+    <view class="tab-item {{currentTab === 'manage' ? 'active' : ''}}" 
+          bindtap="switchTab" 
+          data-tab="manage">
+      <text class="tab-icon">📋</text>
+      <text class="tab-text">卡片管理</text>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content-area">
+    <block wx:if="{{currentTab === 'custom'}}">
+      <block wx:if="{{!flashcards.length}}">
+        <custom-content bind:cardsGenerated="handleCardsGenerated" />
+      </block>
+      <block wx:else>
+        <view class="flashcard-container">
+          <!-- 上一张卡片按钮 -->
+          <view class="nav-btn prev {{currentCardIndex === 0 ? 'disabled' : ''}}" 
+                bindtap="handlePrevCard">
+            <text class="nav-icon">←</text>
+          </view>
+
+          <!-- 卡片内容 -->
+          <view class="flashcard">
+            <view class="question">{{flashcards[currentCardIndex].question}}</view>
+            <view class="progress">{{currentCardIndex + 1}}/{{flashcards.length}}</view>
+          </view>
+
+          <!-- 下一张卡片按钮 -->
+          <view class="nav-btn next {{currentCardIndex === flashcards.length - 1 ? 'disabled' : ''}}"
+                bindtap="handleNextCard">
+            <text class="nav-icon">→</text>
+          </view>
+        </view>
+      </block>
+    </block>
+    <block wx:elif="{{currentTab === 'explore'}}">
+      <view class="placeholder">探索主题功能开发中...</view>
+    </block>
+    <block wx:elif="{{currentTab === 'review'}}">
+      <view class="placeholder">复习功能开发中...</view>
+    </block>
+    <block wx:elif="{{currentTab === 'manage'}}">
+      <view class="placeholder">卡片管理功能开发中...</view>
+    </block>
+  </view>
+</view> 

@@ -1,0 +1,127 @@
+.cards-container {
+  position: fixed;
+  top: 88px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f5f6fa;
+}
+
+/* Tab导航栏样式 */
+.tab-bar {
+  width: 100%;
+  height: 100rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+.tab-item {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  .tab-icon {
+    font-size: 40rpx;
+    margin-bottom: 8rpx;
+    line-height: 1;
+  }
+
+  .tab-text {
+    font-size: 24rpx;
+    color: #666;
+  }
+
+  &.active {
+    .tab-text {
+      color: #4CAF50;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20%;
+      right: 20%;
+      height: 4rpx;
+      background: #4CAF50;
+      border-radius: 2rpx;
+    }
+  }
+}
+
+/* 内容区域样式 */
+.content-area {
+  flex: 1;
+  padding: 30rpx;
+  overflow-y: auto;
+
+  .placeholder {
+    text-align: center;
+    color: #999;
+    font-size: 28rpx;
+    margin-top: 40rpx;
+  }
+}
+
+.flashcard-container {
+  position: relative;
+  padding: 0 60rpx;
+  margin-top: 40rpx;
+
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    font-size: 40rpx;
+    
+    &.disabled {
+      background: #CCCCCC;
+      pointer-events: none;
+    }
+
+    &.prev {
+      left: 0;
+    }
+
+    &.next {
+      right: 0;
+    }
+  }
+
+  .flashcard {
+    background: white;
+    border-radius: 24rpx;
+    padding: 40rpx;
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+
+    .question {
+      font-size: 32rpx;
+      line-height: 1.6;
+      margin-bottom: 20rpx;
+    }
+
+    .progress {
+      text-align: center;
+      color: #999;
+      font-size: 28rpx;
+    }
+  }
+} 

@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "usingComponents": {
+    "navigation-bar": "../../components/navigation-bar/navigation-bar",
+    "custom-content": "../../components/custom-content/custom-content",
+    "settings-dialog": "../../components/settings-dialog/settings-dialog"
+  },
+  "navigationBarTextStyle": "black",
+  "navigationStyle": "custom"
+} 

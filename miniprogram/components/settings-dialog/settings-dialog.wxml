@@ -1,0 +1,41 @@
+<view class="settings-dialog">
+  <view class="settings-btn" bindtap="toggleDialog">
+    <settings-icon />
+  </view>
+
+  <view class="dialog-mask {{isOpen ? 'show' : ''}}" bindtap="toggleDialog"></view>
+  
+  <view class="dialog-content {{isOpen ? 'show' : ''}}">
+    <view class="dialog-header">
+      <text class="title">设置</text>
+    </view>
+
+    <view class="dialog-body">
+      <view class="input-group">
+        <text class="label">DeepSeek API 密钥</text>
+        <input 
+          type="text" 
+          password="{{true}}"
+          placeholder="输入您的 API 密钥"
+          value="{{apiKey}}"
+          bindinput="handleInput"
+        />
+      </view>
+    </view>
+
+    <view class="dialog-footer">
+      <button 
+        class="cancel-btn" 
+        bindtap="toggleDialog"
+      >取消</button>
+      <button 
+        class="save-btn" 
+        bindtap="handleSave"
+      >保存</button>
+    </view>
+
+    <view class="success-msg {{saveSuccess ? 'show' : ''}}">
+      保存成功！
+    </view>
+  </view>
+</view> 
