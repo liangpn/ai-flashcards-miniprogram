@@ -6,13 +6,13 @@ Component({
     flashcards: [] as FlashCard[],    // 当前卡片列表
     currentCardIndex: 0,              // 当前卡片索引
     showAnswer: false,                // 是否显示答案
-    markedQuestions: new Set<string>(),
+    markedCards: [] as FlashCard[],   // 改为存储完整卡片
     isMarked: false  // 新增计算属性的结果
   },
 
   observers: {
     // 监听依赖的数据变化，自动更新 isMarked
-    'currentCardIndex, flashcards, markedQuestions': function() {
+    'currentCardIndex, flashcards, markedCards': function() {
       console.log('=== 监听到数据变化，重新计算标记状态 ===');
       const isMarked = this.isCurrentCardMarked();
       this.setData({ isMarked });
@@ -23,19 +23,19 @@ Component({
     attached() {
       console.log('=== Cards Page Attached ===');
       this.resetState();
-      // 从本地存储加载标记状态
+      // 从本地存储加载标记的卡片
       wx.getStorage({
-        key: 'markedQuestions',
+        key: 'markedCards',
         success: (res) => {
-          console.log('加载本地标记状态:', res.data);
+          console.log('加载已标记卡片:', res.data);
           this.setData({
-            markedQuestions: new Set(res.data || [])
+            markedCards: res.data || []
           }, () => {
-            console.log('标记状态已更新:', this.data.markedQuestions);
+            console.log('标记状态已更新:', this.data.markedCards);
           });
         },
         fail: (error) => {
-          console.log('加载本地标记状态失败:', error);
+          console.log('加载已标记卡片失败:', error);
         }
       });
     }
@@ -137,45 +137,72 @@ Component({
     },
 
     isCurrentCardMarked() {
-      console.log('=== 检查当前卡片标记状态 ===');
-      const { currentCardIndex, flashcards, markedQuestions } = this.data;
-      console.log('当前卡片索引:', currentCardIndex);
-      console.log('卡片列表:', flashcards);
-      console.log('已标记问题:', markedQuestions);
+      const { currentCardIndex, flashcards, markedCards } = this.data;
       if (!flashcards.length) return false;
+      
       const currentQuestion = flashcards[currentCardIndex].question;
-      const isMarked = markedQuestions.has(currentQuestion);
-      console.log('检查当前卡片标记状态:', {
-        currentQuestion,
-        isMarked,
-        markedQuestions: Array.from(markedQuestions)
-      });
-      return isMarked;
+      return markedCards.some((card: FlashCard) => 
+        card.question === currentQuestion
+      );
     },
 
     // 处理标记/取消标记
     handleMarkCard() {
       console.log('=== 处理标记/取消标记 ===');
-      const { currentCardIndex, flashcards, markedQuestions } = this.data;
-      const currentQuestion = flashcards[currentCardIndex].question;
-      const newMarkedQuestions = new Set(Array.from(markedQuestions));
-
-      if (newMarkedQuestions.has(currentQuestion)) {
-        newMarkedQuestions.delete(currentQuestion);
+      const { currentCardIndex, flashcards } = this.data;
+      const currentCard = flashcards[currentCardIndex];
+      
+      // 获取已保存的卡片
+      const markedCards = wx.getStorageSync('markedCards') || [];
+      
+      // 检查是否已标记
+      const isMarked = markedCards.some((card: FlashCard) => 
+        card.question === currentCard.question
+      );
+      
+      if (isMarked) {
+        // 取消标记：移除卡片
+        const newMarkedCards = markedCards.filter((card: FlashCard) => 
+          card.question !== currentCard.question
+        );
+        wx.setStorageSync('markedCards', newMarkedCards);
+        console.log('取消标记卡片:', currentCard.question);
       } else {
-        newMarkedQuestions.add(currentQuestion);
+        // 添加标记：保存完整卡片
+        markedCards.push({
+          question: currentCard.question,
+          answer: currentCard.answer,
+          createdAt: new Date().toISOString()
+        });
+        wx.setStorageSync('markedCards', markedCards);
+        console.log('标记新卡片:', currentCard.question);
       }
 
-      // 更新状态
+      // 更新UI状态
       this.setData({ 
-        markedQuestions: newMarkedQuestions,
-        // isMarked 会通过 observers 自动更新
+        isMarked: !isMarked
       });
+    },
 
-      // 保存到本地存储
-      wx.setStorage({
-        key: 'markedQuestions',
-        data: Array.from(newMarkedQuestions)
+    // 添加标签切换方法
+    switchTab(e: WechatMiniprogram.TouchEvent) {
+      const { tab } = e.currentTarget.dataset;
+      console.log('=== 切换标签 ===');
+      console.log('目标标签:', tab);
+      
+      if (this.data.currentTab === tab) {
+        console.log('已经在当前标签，不需要切换');
+        return;
+      }
+
+      this.setData({ 
+        currentTab: tab,
+        // 切换标签时重置卡片状态
+        flashcards: [],
+        currentCardIndex: 0,
+        showAnswer: false
+      }, () => {
+        console.log('标签切换完成:', this.data.currentTab);
       });
     },
 

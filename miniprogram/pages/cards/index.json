@@ -3,7 +3,8 @@
   "usingComponents": {
     "navigation-bar": "../../components/navigation-bar/navigation-bar",
     "custom-content": "../../components/custom-content/custom-content",
-    "settings-dialog": "../../components/settings-dialog/settings-dialog"
+    "settings-dialog": "../../components/settings-dialog/settings-dialog",
+    "manage-cards": "../../components/manage-cards/index"
   },
   "navigationBarTextStyle": "black",
   "navigationStyle": "custom"

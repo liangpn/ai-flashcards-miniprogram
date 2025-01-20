@@ -1,0 +1,112 @@
+.manage-cards {
+  padding: 30rpx;
+
+  .loading, .error, .empty {
+    text-align: center;
+    padding: 40rpx;
+    color: #666;
+    font-size: 28rpx;
+  }
+
+  .error {
+    color: #e74c3c;
+  }
+
+  .cards-list {
+    .card-item {
+      display: flex;
+      gap: 20rpx;
+      background: white;
+      border-radius: 16rpx;
+      padding: 30rpx;
+      margin-bottom: 20rpx;
+      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+
+      &.selected {
+        background: #f8f9fa;
+        border: 1px solid #e74c3c;
+      }
+
+      .card-checkbox {
+        padding-top: 6rpx;
+      }
+
+      .card-content {
+        flex: 1;
+        .question {
+          font-size: 32rpx;
+          font-weight: 500;
+          color: #082d53;
+          margin-bottom: 16rpx;
+        }
+
+        .answer {
+          font-size: 28rpx;
+          color: #666;
+          line-height: 1.6;
+        }
+      }
+
+      .card-actions {
+        margin-top: 20rpx;
+        display: flex;
+        justify-content: flex-end;
+
+        .unmark-btn {
+          background: #e74c3c;
+          color: white;
+          font-size: 24rpx;
+          padding: 12rpx 24rpx;
+          border-radius: 30rpx;
+          border: none;
+
+          &:active {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+
+  .batch-actions {
+    background: #fff;
+    padding: 20rpx 30rpx;
+    margin: -30rpx -30rpx 30rpx;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .selection-info {
+      display: flex;
+      align-items: center;
+      gap: 20rpx;
+
+      .selected-count {
+        color: #666;
+        font-size: 28rpx;
+      }
+    }
+
+    .batch-delete-btn {
+      font-size: 28rpx;
+      padding: 12rpx 32rpx;
+      border-radius: 30rpx;
+      background: #e74c3c;
+      color: white;
+      
+      &.disabled {
+        background: #ccc;
+        color: #fff;
+      }
+
+      &:active {
+        opacity: 0.8;
+      }
+    }
+  }
+} 

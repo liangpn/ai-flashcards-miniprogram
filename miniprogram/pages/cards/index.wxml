@@ -91,7 +91,7 @@
       <view class="placeholder">复习功能开发中...</view>
     </block>
     <block wx:elif="{{currentTab === 'manage'}}">
-      <view class="placeholder">卡片管理功能开发中...</view>
+      <manage-cards />
     </block>
   </view>
 </view> 

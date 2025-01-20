@@ -1,0 +1,38 @@
+<view class="manage-cards">
+  <view wx:if="{{isLoading}}" class="loading">加载中...</view>
+  
+  <view wx:elif="{{error}}" class="error">{{error}}</view>
+  
+  <view wx:elif="{{!markedCards.length}}" class="empty">
+    <text>还没有标记任何卡片</text>
+  </view>
+  
+  <view wx:else class="cards-list">
+    <view class="batch-actions">
+      <view class="selection-info">
+        <checkbox-group bindchange="handleSelectAll">
+          <checkbox value="all" checked="{{isAllSelected}}">全选</checkbox>
+        </checkbox-group>
+      </view>
+      <button class="batch-delete-btn {{selectedCount ? 'active' : 'disabled'}}"
+              disabled="{{!selectedCount}}"
+              bindtap="handleClearSelected">
+        删除选中 ({{selectedCount}})
+      </button>
+    </view>
+
+    <checkbox-group bindchange="handleSelectionChange">
+      <view wx:for="{{markedCards}}" 
+            wx:key="question" 
+            class="card-item {{item.selected ? 'selected' : ''}}">
+        <view class="card-checkbox">
+          <checkbox value="{{index}}" checked="{{item.selected}}" />
+        </view>
+        <view class="card-content">
+          <view class="question">{{item.question}}</view>
+          <view class="answer">{{item.answer}}</view>
+        </view>
+      </view>
+    </checkbox-group>
+  </view>
+</view> 

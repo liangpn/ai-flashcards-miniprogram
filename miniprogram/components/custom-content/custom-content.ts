@@ -57,6 +57,9 @@ Component({
       });
 
       try {
+        // 真实请求
+        // const flashcards = await AIService.generateFlashcards(this.data.content, this.data.cardCount, this.data.apiKey)
+        
         // 使用模拟数据替代 AI 请求
         console.log('使用模拟数据...');
         const flashcards = FlashCardService.getMockCards();
