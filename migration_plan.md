@@ -51,7 +51,7 @@ AI-flashcard-deepseek/
      - 按主题生成闪卡
        - 依赖组件：FlashCard (app/components/FlashCard.tsx)
        - 依赖组件：MarkdownContent (app/components/MarkdownContent.tsx)
-     - 自定义内容生成
+     - 设置页面
        - 依赖组件：SettingsDialog (app/components/SettingsDialog.tsx)
      - 探索主题
        - 依赖组件：ExploreTopics (app/components/ExploreTopics.tsx)

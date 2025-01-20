@@ -51,7 +51,28 @@
 
           <!-- 卡片内容 -->
           <view class="flashcard">
-            <view class="question">{{flashcards[currentCardIndex].question}}</view>
+            <view class="question">
+              <text>{{flashcards[currentCardIndex].question}}</text>
+            </view>
+            
+            <view class="answer-toggle">
+              <button class="toggle-btn {{!showAnswer ? '' : 'hiding'}}" 
+                      bindtap="toggleAnswer">
+                {{showAnswer ? '隐藏答案' : '显示答案'}}
+              </button>
+            </view>
+
+            <view class="answer {{showAnswer ? 'show' : ''}}" wx:if="{{showAnswer}}">
+              <text>{{flashcards[currentCardIndex].answer}}</text>
+            </view>
+            
+            <view class="card-actions">
+              <button class="mark-btn {{isMarked ? 'marked' : ''}}"
+                      bindtap="handleMarkCard">
+                {{isMarked ? '已标记' : '标记卡片'}}
+              </button>
+            </view>
+            
             <view class="progress">{{currentCardIndex + 1}}/{{flashcards.length}}</view>
           </view>
 
