@@ -1,0 +1,46 @@
+<view class="review-cards">
+  <view wx:if="{{isLoading}}" class="loading">加载中...</view>
+  
+  <view wx:elif="{{error}}" class="error">{{error}}</view>
+  
+  <view wx:elif="{{!reviewCards.length}}" class="empty">
+    <text>还没有可以复习的卡片</text>
+  </view>
+  
+  <view wx:else class="review-container">
+    <!-- 进度显示 -->
+    <view class="progress-bar">
+      <text>已复习: {{progress.reviewed}}/{{progress.total}}</text>
+      <text>记住: {{progress.remembered}}</text>
+    </view>
+
+    <!-- 卡片内容 -->
+    <view class="flashcard">
+      <view class="question">
+        {{reviewCards[currentIndex].question}}
+      </view>
+
+      <view class="answer {{showAnswer ? 'show' : ''}}" wx:if="{{showAnswer}}">
+        {{reviewCards[currentIndex].answer}}
+      </view>
+      
+      <!-- 所有按钮放在一行 -->
+      <view class="action-buttons">
+        <button class="forgot-btn" 
+                bindtap="handleRemembered" 
+                data-remembered="{{false}}">
+          没记住
+        </button>
+        <button class="toggle-btn {{!showAnswer ? '' : 'hiding'}}" 
+                bindtap="toggleAnswer">
+          {{showAnswer ? '隐藏答案' : '显示答案'}}
+        </button>
+        <button class="remembered-btn" 
+                bindtap="handleRemembered" 
+                data-remembered="{{true}}">
+          记住了
+        </button>
+      </view>
+    </view>
+  </view>
+</view> 

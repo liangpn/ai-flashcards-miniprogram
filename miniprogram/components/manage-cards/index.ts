@@ -38,56 +38,56 @@ Component({
       }
     },
 
-    handleUnmarkCard(e: WechatMiniprogram.TouchEvent) {
-      const { index } = e.currentTarget.dataset;
-      const { markedCards } = this.data;
+    // handleUnmarkCard(e: WechatMiniprogram.TouchEvent) {
+    //   const { index } = e.currentTarget.dataset;
+    //   const { markedCards } = this.data;
       
-      // 添加确认提示
-      wx.showModal({
-        title: '取消标记',
-        content: '确定要取消标记这张卡片吗？此操作不可恢复！',
-        confirmText: '确定',
-        cancelText: '取消',
-        success: (res) => {
-          if (res.confirm) {
-            // 用户点击确定，执行取消标记
-            const newMarkedCards = [...markedCards];
-            newMarkedCards.splice(index, 1);
+    //   // 添加确认提示
+    //   wx.showModal({
+    //     title: '取消标记',
+    //     content: '确定要取消标记这张卡片吗？此操作不可恢复！',
+    //     confirmText: '确定',
+    //     cancelText: '取消',
+    //     success: (res) => {
+    //       if (res.confirm) {
+    //         // 用户点击确定，执行取消标记
+    //         const newMarkedCards = [...markedCards];
+    //         newMarkedCards.splice(index, 1);
             
-            // 更新存储和状态
-            wx.setStorageSync('markedCards', newMarkedCards);
-            this.setData({ markedCards: newMarkedCards });
-          }
-          // 用户点击取消，不执行任何操作
-        }
-      });
-    },
+    //         // 更新存储和状态
+    //         wx.setStorageSync('markedCards', newMarkedCards);
+    //         this.setData({ markedCards: newMarkedCards });
+    //       }
+    //       // 用户点击取消，不执行任何操作
+    //     }
+    //   });
+    // },
 
-    handleClearAllMarks() {
-      // 添加确认提示
-      wx.showModal({
-        title: '清除全部标记',
-        content: '确定要清除所有标记的卡片吗？此操作不可恢复！',
-        confirmText: '确定',
-        cancelText: '取消',
-        success: (res) => {
-          if (res.confirm) {
-            // 清空存储
-            wx.setStorageSync('markedCards', []);
-            // 更新状态
-            this.setData({ 
-              markedCards: [] 
-            });
-            // 提示成功
-            wx.showToast({
-              title: '已清除全部标记',
-              icon: 'success',
-              duration: 2000
-            });
-          }
-        }
-      });
-    },
+    // handleClearAllMarks() {
+    //   // 添加确认提示
+    //   wx.showModal({
+    //     title: '清除全部标记',
+    //     content: '确定要清除所有标记的卡片吗？此操作不可恢复！',
+    //     confirmText: '确定',
+    //     cancelText: '取消',
+    //     success: (res) => {
+    //       if (res.confirm) {
+    //         // 清空存储
+    //         wx.setStorageSync('markedCards', []);
+    //         // 更新状态
+    //         this.setData({ 
+    //           markedCards: [] 
+    //         });
+    //         // 提示成功
+    //         wx.showToast({
+    //           title: '已清除全部标记',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }
+    //   });
+    // },
 
     handleSelectionChange(e: WechatMiniprogram.CheckboxGroupChange) {
       console.log('=== 选择状态变化 ===');
