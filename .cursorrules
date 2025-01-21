@@ -13,6 +13,15 @@ Project Structure:
 - Use proper file extensions (.ts, .wxml, .wxss, .json)
 - Implement subpackages for better loading performance
 - Manage global and page configurations properly
+Component Structure:
+  - Each component must have four essential files:
+    1. index.ts    - Component logic and TypeScript definitions
+    2. index.wxml  - Component template
+    3. index.scss  - Component styles 
+    4. index.json  - Component configuration
+  - Component directory should use kebab-case naming
+  - All four files should share the same base name 'index'
+  - Component configuration must declare { "component": true }
 
 Naming Conventions:
 - camelCase: variables, functions (e.g., 'getUserInfo', 'handleTap')

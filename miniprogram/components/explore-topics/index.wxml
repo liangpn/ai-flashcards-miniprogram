@@ -1,0 +1,105 @@
+<view class="explore-topics">
+  <block wx:if="{{!flashcards.length}}">
+    <!-- 搜索区域 -->
+    <view class="search-area">
+      <input 
+        class="keyword-input"
+        placeholder="输入关键词探索相关主题"
+        value="{{keyword}}"
+        bindinput="handleInput"
+        bindconfirm="handleExplore"
+      />
+      <view class="button-group">
+        <button 
+          class="explore-btn"
+          disabled="{{isLoading}}"
+          bindtap="handleExplore"
+        >
+          {{isLoading ? '探索中...' : '探索'}}
+        </button>
+        <button 
+          wx:if="{{topics.length}}"
+          class="clear-btn"
+          bindtap="handleClear"
+        >
+          清除
+        </button>
+      </view>
+    </view>
+
+    <!-- 错误提示 -->
+    <view wx:if="{{error}}" class="error-tip">
+      {{error}}
+    </view>
+
+    <!-- 主题列表 -->
+    <view wx:if="{{topics.length}}" class="topics-grid">
+      <view 
+        wx:for="{{topics}}" 
+        wx:key="*this"
+        class="topic-item"
+        bindtap="handleTopicSelect"
+        data-topic="{{item}}"
+      >
+        {{item}}
+      </view>
+    </view>
+
+    <!-- 生成设置弹窗 -->
+    <view class="settings-modal {{showSettings ? 'show' : ''}}">
+      <view class="modal-mask" bindtap="handleSettingsCancel"></view>
+      <view class="modal-content">
+        <view class="modal-header">生成设置</view>
+        
+        <view class="modal-body">
+          <!-- 卡片数量设置 -->
+          <view class="card-count">
+            <view class="count-label">
+              <text>卡片数量: {{cardCount}}</text>
+              <text class="count-range">1-100张</text>
+            </view>
+            <slider
+              min="1"
+              max="100"
+              value="{{cardCount}}"
+              bindchange="handleCardCountChange"
+              activeColor="#4CAF50"
+              backgroundColor="#E8E8E8"
+              block-size="28"
+              block-color="#3498db"
+              selected-color="#4CAF50"
+            />
+          </view>
+
+          <!-- 难度选择 -->
+          <view class="difficulty-select">
+            <text class="difficulty-label">难度选择:</text>
+            <view class="difficulty-buttons">
+              <view 
+                wx:for="{{difficulties}}"
+                wx:key="value"
+                class="difficulty-btn {{difficulty === item.value ? 'active' : ''}}"
+                data-value="{{item.value}}"
+                bindtap="handleDifficultySelect"
+              >
+                {{item.label}}
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="modal-footer">
+          <button class="cancel-btn" bindtap="handleSettingsCancel">取消</button>
+          <button class="confirm-btn" bindtap="handleSettingsConfirm">确定</button>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <card-display 
+      id="cardDisplay"
+      bind:cardsGenerated="handleCardsGenerated"
+      bind:close="handleClose"
+    />
+  </block>
+</view> 

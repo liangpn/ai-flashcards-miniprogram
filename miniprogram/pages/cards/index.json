@@ -5,7 +5,9 @@
     "custom-content": "../../components/custom-content/custom-content",
     "settings-dialog": "../../components/settings-dialog/settings-dialog",
     "manage-cards": "../../components/manage-cards/index",
-    "review-cards": "../../components/review-cards/index"
+    "review-cards": "../../components/review-cards/index",
+    "explore-topics": "../../components/explore-topics/index",
+    "card-display": "../../components/card-display/index"
   },
   "navigationBarTextStyle": "black",
   "navigationStyle": "custom"

@@ -1,0 +1,45 @@
+<view class="flashcard-container">
+  <!-- 上一张卡片按钮 -->
+  <view class="nav-btn prev {{currentIndex === 0 ? 'disabled' : ''}}" 
+        bindtap="handlePrevCard">
+    <text class="nav-icon">←</text>
+  </view>
+
+  <!-- 卡片内容 -->
+  <view class="flashcard">
+    <!-- 关闭按钮 -->
+    <view bindtap="handleClose">
+      <image class="close-btn" src="../../assets/tabbar/close_button.png" />
+    </view>
+
+    <view class="question">
+      <text>{{flashcards[currentIndex].question}}</text>
+    </view>
+    
+    <view class="answer-toggle">
+      <button class="toggle-btn {{!showAnswer ? '' : 'hiding'}}" 
+              bindtap="handleToggleAnswer">
+        {{showAnswer ? '隐藏答案' : '显示答案'}}
+      </button>
+    </view>
+
+    <view class="answer {{showAnswer ? 'show' : ''}}" wx:if="{{showAnswer}}">
+      <text>{{flashcards[currentIndex].answer}}</text>
+    </view>
+    
+    <view class="card-actions">
+      <button class="mark-btn {{isMarked ? 'marked' : ''}}"
+              bindtap="handleMarkCard">
+        {{isMarked ? '已标记' : '标记卡片'}}
+      </button>
+    </view>
+    
+    <view class="progress">{{currentIndex + 1}}/{{flashcards.length}}</view>
+  </view>
+
+  <!-- 下一张卡片按钮 -->
+  <view class="nav-btn next {{currentIndex === flashcards.length - 1 ? 'disabled' : ''}}"
+        bindtap="handleNextCard">
+    <text class="nav-icon">→</text>
+  </view>
+</view> 

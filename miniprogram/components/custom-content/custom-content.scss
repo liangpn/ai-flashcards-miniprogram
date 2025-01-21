@@ -1,57 +1,94 @@
 .custom-content {
-  padding: 20rpx;
+  padding: 20px;
   
   .content-input {
     width: 100%;
-    height: 300rpx;
-    padding: 20rpx;
+    height: 200px;
+    padding: 15px;
     box-sizing: border-box;
-    border: 2rpx solid #E8E8E8;
-    border-radius: 12rpx;
-    font-size: 28rpx;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
     line-height: 1.5;
-    background: #FFFFFF;
+    margin-bottom: 20px;
   }
 
   .card-count {
-    margin: 40rpx 0;
+    margin-bottom: 20px;
 
     .count-label {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 20rpx;
-      font-size: 28rpx;
-      color: #666;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #333;
 
       .count-range {
         color: #999;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .difficulty-selector {
+    margin-bottom: 20px;
+
+    .difficulty-label {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .difficulty-options {
+      display: flex;
+      gap: 10px;
+
+      .difficulty-option {
+        flex: 1;
+        text-align: center;
+        padding: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #666;
+        background: #fff;
+        transition: all 0.3s ease;
+
+        &.active {
+          background: #4CAF50;
+          color: #fff;
+          border-color: #4CAF50;
+        }
       }
     }
   }
 
   .submit-btn {
     width: 100%;
-    height: 88rpx;
-    line-height: 88rpx;
+    height: 44px;
+    line-height: 44px;
     text-align: center;
     background: #4CAF50;
-    color: #FFFFFF;
-    border-radius: 12rpx;
-    font-size: 32rpx;
-    margin-top: 40rpx;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 20px;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
 
     &.disabled {
-      background: #CCCCCC;
+      background: #ccc;
+      color: #fff;
     }
   }
 
   .error-msg {
+    color: #f44336;
+    font-size: 14px;
+    margin-top: 10px;
     text-align: center;
-    color: #FF4444;
-    font-size: 28rpx;
-    margin-top: 20rpx;
   }
 } 
