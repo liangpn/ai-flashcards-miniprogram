@@ -33,11 +33,11 @@ Component({
 
       try {
         // 真实请求
-        // const topics = await getTopics(this.data.keyword);
+        const topics = await AIService.getTopics(this.data.keyword);
         
         // 使用模拟数据替代 AI 请求
-        console.log('使用模拟数据...');
-        const topics = ['AI', '编程', '前端', '后端', '数据库'];
+        // console.log('使用模拟主题数据...');
+        // const topics = ['AI', '编程', '前端', '后端', '数据库'];
         
         this.setData({ topics });
       } catch (error) {
@@ -107,11 +107,7 @@ Component({
       console.log('生成参数:', { selectedTopic, cardCount, difficulty });
       
       try {
-        // 显示加载状态
-        wx.showLoading({
-          title: '生成中...',
-          mask: true
-        });
+        
 
         // 调用 AI 服务生成卡片
         const apiKey = wx.getStorageSync('deepseek_api_key');
@@ -119,8 +115,15 @@ Component({
           throw new Error('请先配置 API 密钥');
         }
 
+        // 显示加载状态
+        wx.showLoading({
+          title: '生成中...',
+          mask: true
+        });
+
         // 真实请求
-        // const cards = await AIService.generateFlashcards(
+        // const mockCards = await AIService.generateFlashcards(
+        //   2, // 2是探索主题页面传递的请求
         //   selectedTopic,
         //   cardCount,
         //   apiKey,
@@ -129,9 +132,15 @@ Component({
 
         // 使用模拟数据替代 AI 请求
         console.log('使用模拟数据...');
-        const flashcards = FlashCardService.getMockCards();
-        console.log('获取模拟数据成功:', flashcards);
+        const mockCards = FlashCardService.getMockCards();
+        console.log('获取模拟数据成功:', mockCards);
+
         console.log('当前组件数据状态:', this.data);
+        // 为每张卡片添加topic信息
+        const flashcards = mockCards.map(card => ({
+          ...card,
+          topic: selectedTopic  // 使用选中的主题作为topic
+        }));
 
         // 先关闭设置弹窗，更新状态
         this.setData({

@@ -81,13 +81,13 @@ Component({
 
       try {
         // 真实请求
-        // const flashcards = await AIService.generateFlashcards(this.data.content, this.data.cardCount, this.data.apiKey, this.data.difficulty)
+        // const flashcards = await AIService.generateFlashcards(1, this.data.content, this.data.cardCount, this.data.apiKey, this.data.difficulty)
         
         // 使用模拟数据替代 AI 请求
         console.log('使用模拟数据...');
         const flashcards = FlashCardService.getMockCards();
-        
         console.log('获取模拟数据成功:', flashcards);
+
         console.log('当前组件数据状态:', this.data);
         
         // 更新状态，显示卡片展示组件

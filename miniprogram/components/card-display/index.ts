@@ -3,6 +3,7 @@ interface IFlashcard {
   answer: string;
   isMarked?: boolean;
   createdAt?: string;
+  topic: string;
 }
 
 Component({
@@ -137,6 +138,7 @@ Component({
         newMarkedCards = [...markedCards, {
           question: currentCard.question,
           answer: currentCard.answer,
+          topic: currentCard.topic,
           createdAt: new Date().toISOString()
         }];
         console.log('标记新卡片:', currentCard.question);
