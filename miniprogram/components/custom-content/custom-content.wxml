@@ -22,7 +22,7 @@
       />
     </view>
 
-    <view class="difficulty-selector">
+    <view class="difficulty-selector" catch:tap="handleDifficultyChange">
       <view class="difficulty-label">难度选择:</view>
       <view class="difficulty-options">
         <view 
@@ -30,7 +30,6 @@
           wx:key="value"
           class="difficulty-option {{difficulty === item.value ? 'active' : ''}}"
           data-value="{{item.value}}"
-          bindtap="handleDifficultyChange"
         >
           {{item.label}}
         </view>
@@ -40,7 +39,7 @@
     <button 
       class="submit-btn {{isLoading || !content ? 'disabled' : ''}}"
       disabled="{{isLoading || !content}}"
-      bindtap="handleSubmit"
+      catch:tap="handleSubmit"
     >
       {{isLoading ? '生成中...' : '点击开始学习'}}
     </button>

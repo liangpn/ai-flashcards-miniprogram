@@ -3,44 +3,78 @@
   
   <view wx:elif="{{error}}" class="error">{{error}}</view>
   
-  <view wx:elif="{{!reviewCards.length}}" class="empty">
+  <view wx:elif="{{!availableTopics.length}}" class="empty">
     <text>还没有可以复习的卡片</text>
   </view>
+
+  <block wx:elif="{{!reviewCards.length}}">
+    <!-- Topic 选择区域 -->
+    <view class="topic-selector">
+      <view class="selector-header">选择要复习的主题：</view>
+      <view class="dropdown-container">
+        <view class="selected-topics" catch:tap="toggleDropdown">
+          <text wx:if="{{!selectedTopics.length}}">请选择主题</text>
+          <text wx:else>已选{{selectedTopics.length}}个主题</text>
+          <view class="dropdown-arrow {{isDropdownOpen ? 'open' : ''}}"></view>
+        </view>
+        <view class="dropdown-list {{isDropdownOpen ? 'show' : ''}}">
+          <view wx:for="{{availableTopics}}" 
+                wx:key="name" 
+                class="dropdown-item {{item.selected ? 'selected' : ''}}"
+                data-topic="{{item.name}}"
+                catch:tap="handleTopicClick">
+            <text>{{item.name}}</text>
+            <view class="check-icon">
+              <text class="check-mark">✓</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <button class="start-btn {{selectedTopics.length ? 'active' : ''}}"
+              disabled="{{!selectedTopics.length}}"
+              catch:tap="startReview">
+        开始复习 (已选{{selectedTopics.length}}个主题)
+      </button>
+    </view>
+  </block>
   
-  <view wx:else class="review-container">
-    <!-- 进度显示 -->
-    <view class="progress-bar">
-      <text>已复习: {{progress.reviewed}}/{{progress.total}}</text>
-      <text>记住: {{progress.remembered}}</text>
-    </view>
-
-    <!-- 卡片内容 -->
-    <view class="flashcard">
-      <view class="question">
-        {{reviewCards[currentIndex].question}}
+  <block wx:else>
+    <view class="review-container">
+      <!-- 进度显示 -->
+      <view class="progress-bar">
+        <text>已复习: {{progress.reviewed}}/{{progress.total}}</text>
+        <text>记住: {{progress.remembered}}</text>
       </view>
 
-      <view class="answer {{showAnswer ? 'show' : ''}}" wx:if="{{showAnswer}}">
-        {{reviewCards[currentIndex].answer}}
-      </view>
-      
-      <!-- 所有按钮放在一行 -->
-      <view class="action-buttons">
-        <button class="forgot-btn" 
-                bindtap="handleRemembered" 
-                data-remembered="{{false}}">
-          没记住
-        </button>
-        <button class="toggle-btn {{!showAnswer ? '' : 'hiding'}}" 
-                bindtap="toggleAnswer">
-          {{showAnswer ? '隐藏答案' : '显示答案'}}
-        </button>
-        <button class="remembered-btn" 
-                bindtap="handleRemembered" 
-                data-remembered="{{true}}">
-          记住了
-        </button>
+      <!-- 卡片内容 -->
+      <view class="flashcard">
+        <view class="topic-tag">{{reviewCards[currentIndex].topic || '未分类'}}</view>
+        <view class="question">
+          {{reviewCards[currentIndex].question}}
+        </view>
+
+        <view class="answer {{showAnswer ? 'show' : ''}}" wx:if="{{showAnswer}}">
+          {{reviewCards[currentIndex].answer}}
+        </view>
+        
+        <!-- 所有按钮放在一行 -->
+        <view class="action-buttons">
+          <button class="forgot-btn" 
+                  catch:tap="handleRemembered" 
+                  data-remembered="{{false}}">
+            没记住
+          </button>
+          <button class="toggle-btn {{!showAnswer ? '' : 'hiding'}}" 
+                  catch:tap="toggleAnswer">
+            {{showAnswer ? '隐藏答案' : '显示答案'}}
+          </button>
+          <button class="remembered-btn" 
+                  catch:tap="handleRemembered" 
+                  data-remembered="{{true}}">
+            记住了
+          </button>
+        </view>
       </view>
     </view>
-  </view>
+  </block>
 </view> 

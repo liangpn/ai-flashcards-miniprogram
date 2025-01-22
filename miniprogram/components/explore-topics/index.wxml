@@ -13,14 +13,14 @@
         <button 
           class="explore-btn"
           disabled="{{isLoading}}"
-          bindtap="handleExplore"
+          catch:tap="handleExplore"
         >
           {{isLoading ? '探索中...' : '探索'}}
         </button>
         <button 
           wx:if="{{topics.length}}"
           class="clear-btn"
-          bindtap="handleClear"
+          catch:tap="handleClear"
         >
           清除
         </button>
@@ -38,7 +38,7 @@
         wx:for="{{topics}}" 
         wx:key="*this"
         class="topic-item"
-        bindtap="handleTopicSelect"
+        catch:tap="handleTopicSelect"
         data-topic="{{item}}"
       >
         {{item}}
@@ -47,7 +47,7 @@
 
     <!-- 生成设置弹窗 -->
     <view class="settings-modal {{showSettings ? 'show' : ''}}">
-      <view class="modal-mask" bindtap="handleSettingsCancel"></view>
+      <view class="modal-mask" catch:tap="handleSettingsCancel"></view>
       <view class="modal-content">
         <view class="modal-header">生成设置</view>
         
@@ -80,7 +80,7 @@
                 wx:key="value"
                 class="difficulty-btn {{difficulty === item.value ? 'active' : ''}}"
                 data-value="{{item.value}}"
-                bindtap="handleDifficultySelect"
+                catch:tap="handleDifficultySelect"
               >
                 {{item.label}}
               </view>
@@ -89,8 +89,8 @@
         </view>
 
         <view class="modal-footer">
-          <button class="cancel-btn" bindtap="handleSettingsCancel">取消</button>
-          <button class="confirm-btn" bindtap="handleSettingsConfirm">确定</button>
+          <button class="cancel-btn" catch:tap="handleSettingsCancel">取消</button>
+          <button class="confirm-btn" catch:tap="handleSettingsConfirm">确定</button>
         </view>
       </view>
     </view>

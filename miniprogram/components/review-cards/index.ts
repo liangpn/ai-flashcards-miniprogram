@@ -1,7 +1,15 @@
 import { FlashCard } from '../../services/ai'
 
+interface TopicItem {
+  name: string;
+  selected: boolean;
+}
+
 Component({
   data: {
+    availableTopics: [] as TopicItem[],    // 所有可选的 topic
+    selectedTopics: [] as string[],         // 选中的主题列表
+    isDropdownOpen: false,              // 下拉列表是否展开
     reviewCards: [] as FlashCard[],
     currentIndex: 0,
     showAnswer: false,
@@ -16,22 +24,104 @@ Component({
 
   lifetimes: {
     attached() {
-      this.loadReviewCards();
+      this.loadAvailableTopics();
     }
   },
 
   methods: {
-    async loadReviewCards() {
-      console.log('=== 加载复习卡片 ===');
+    async loadAvailableTopics() {
+      console.log('=== 加载可选主题 ===');
       this.setData({ isLoading: true });
 
       try {
         // 从本地存储获取已标记的卡片
-        const markedCards = wx.getStorageSync('markedCards') || [];
+        const markedCards = wx.getStorageSync('markedCards') || [] as FlashCard[];
         console.log('获取到标记卡片:', markedCards.length);
 
+        // 提取所有不重复的 topic
+        const uniqueTopics = Array.from(
+          new Set(
+            markedCards.map((card: FlashCard) => card.topic || '未分类')
+          )
+        ) as string[];
+        const topics: TopicItem[] = uniqueTopics.map(name => ({
+          name,
+          selected: false
+        }));
+        console.log('可选主题:', topics);
+
+        this.setData({
+          availableTopics: topics,
+          isLoading: false
+        });
+      } catch (error) {
+        console.error('加载主题失败:', error);
+        this.setData({
+          error: '加载失败',
+          isLoading: false
+        });
+      }
+    },
+
+    toggleDropdown() {
+      console.log('=== 切换下拉列表状态 ===');
+      this.setData({
+        isDropdownOpen: !this.data.isDropdownOpen
+      });
+    },
+
+    handleTopicClick(e: WechatMiniprogram.TouchEvent) {
+      console.log('=== 选择主题 ===');
+      const topic = e.currentTarget.dataset.topic as string;
+      console.log('点击的主题:', topic);
+      
+      const availableTopics = this.data.availableTopics.map(item => {
+        if (item.name === topic) {
+          return { ...item, selected: !item.selected };
+        }
+        return item;
+      });
+      
+      // 计算选中的主题数量
+      const selectedTopics = availableTopics.filter(item => item.selected).map(item => item.name);
+      console.log('选中的主题数量:', selectedTopics.length);
+      
+      this.setData({ 
+        availableTopics,
+        selectedTopics,  // 更新选中的主题列表
+        isDropdownOpen: true  // 保持下拉列表展开，方便继续选择
+      });
+    },
+
+    async startReview() {
+      console.log('=== 开始复习 ===');
+      const selectedTopics = this.data.availableTopics
+        .filter(item => item.selected)
+        .map(item => item.name);
+
+      if (!selectedTopics.length) {
+        wx.showToast({
+          title: '请选择要复习的主题',
+          icon: 'none'
+        });
+        return;
+      }
+
+      this.setData({ isLoading: true });
+
+      try {
+        // 从本地存储获取已标记的卡片
+        const markedCards = wx.getStorageSync('markedCards') || [] as FlashCard[];
+        console.log('获取到标记卡片:', markedCards.length);
+
+        // 根据选中的主题过滤卡片
+        const filteredCards = markedCards.filter((card: FlashCard) => 
+          selectedTopics.includes(card.topic || '未分类')
+        );
+        console.log('过滤后的卡片:', filteredCards.length);
+
         // 随机打乱顺序
-        const shuffled = [...markedCards].sort(() => Math.random() - 0.5);
+        const shuffled = [...filteredCards].sort(() => Math.random() - 0.5);
         console.log('打乱顺序后准备复习');
 
         this.setData({
@@ -46,12 +136,33 @@ Component({
           isLoading: false
         });
       } catch (error) {
-        console.error('加载复习卡片失败:', error);
+        console.error('准备复习卡片失败:', error);
         this.setData({
           error: '加载失败',
           isLoading: false
         });
       }
+    },
+
+    resetReview() {
+      console.log('=== 重置复习状态 ===');
+      const availableTopics = this.data.availableTopics.map(item => ({
+        ...item,
+        selected: false
+      }));
+
+      this.setData({
+        reviewCards: [],
+        currentIndex: 0,
+        showAnswer: false,
+        availableTopics,
+        selectedTopics: [],  // 重置选中的主题列表
+        progress: {
+          total: 0,
+          reviewed: 0,
+          remembered: 0
+        }
+      });
     },
 
     toggleAnswer() {
@@ -93,8 +204,8 @@ Component({
           content: `共复习 ${newProgress.reviewed} 张卡片，记住了 ${newProgress.remembered} 张`,
           showCancel: false,
           success: () => {
-            // 重新开始复习
-            this.loadReviewCards();
+            // 重置复习状态
+            this.resetReview();
           }
         });
       }

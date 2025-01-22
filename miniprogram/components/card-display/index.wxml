@@ -1,14 +1,14 @@
 <view class="flashcard-container">
   <!-- 上一张卡片按钮 -->
   <view class="nav-btn prev {{currentIndex === 0 ? 'disabled' : ''}}" 
-        bindtap="handlePrevCard">
+        catch:tap="handlePrevCard">
     <text class="nav-icon">←</text>
   </view>
 
   <!-- 卡片内容 -->
   <view class="flashcard">
     <!-- 关闭按钮 -->
-    <view bindtap="handleClose">
+    <view catch:tap="handleClose">
       <image class="close-btn" src="../../assets/tabbar/close_button.png" />
     </view>
 
@@ -18,7 +18,7 @@
     
     <view class="answer-toggle">
       <button class="toggle-btn {{!showAnswer ? '' : 'hiding'}}" 
-              bindtap="handleToggleAnswer">
+              catch:tap="handleToggleAnswer">
         {{showAnswer ? '隐藏答案' : '显示答案'}}
       </button>
     </view>
@@ -29,7 +29,7 @@
     
     <view class="card-actions">
       <button class="mark-btn {{isMarked ? 'marked' : ''}}"
-              bindtap="handleMarkCard">
+              catch:tap="handleMarkCard">
         {{isMarked ? '已标记' : '标记卡片'}}
       </button>
     </view>
@@ -39,7 +39,7 @@
 
   <!-- 下一张卡片按钮 -->
   <view class="nav-btn next {{currentIndex === flashcards.length - 1 ? 'disabled' : ''}}"
-        bindtap="handleNextCard">
+        catch:tap="handleNextCard">
     <text class="nav-icon">→</text>
   </view>
 </view> 

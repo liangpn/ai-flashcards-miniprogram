@@ -1,103 +1,256 @@
 .review-cards {
   padding: 30rpx;
 
-  .loading, .error, .empty {
+  .loading {
     text-align: center;
+    color: #999;
     padding: 40rpx;
-    color: #666;
-    font-size: 28rpx;
   }
 
   .error {
+    text-align: center;
     color: #e74c3c;
+    padding: 40rpx;
+  }
+
+  .empty {
+    text-align: center;
+    color: #999;
+    padding: 40rpx;
+  }
+
+  .topic-selector {
+    padding: 20rpx;
+    background: #8dc4fc37;
+    border-radius: 12rpx;
+    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+
+    .selector-header {
+      font-size: 28rpx;
+      color: #333;
+      margin-bottom: 20rpx;
+    }
+
+    .dropdown-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 30rpx;
+    }
+
+    .selected-topics {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20rpx;
+      background: #fdfafa;
+      border-radius: 8rpx;
+      font-size: 28rpx;
+      color: #333;
+      cursor: pointer;
+
+      .dropdown-arrow {
+        width: 0;
+        height: 0;
+        border-left: 12rpx solid transparent;
+        border-right: 12rpx solid transparent;
+        border-top: 12rpx solid #666;
+        transition: transform 0.3s ease;
+
+        &.open {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    .dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 8rpx;
+      box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+      max-height: 0;
+      overflow-y: auto;
+      transition: max-height 0.3s ease;
+      z-index: 100;
+
+      &.show {
+        max-height: 400rpx;
+      }
+
+      .dropdown-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20rpx;
+        font-size: 28rpx;
+        color: #333;
+        border-bottom: 1rpx solid #eee;
+        transition: all 0.2s ease;
+        background: #fff;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:active {
+          background: #f5f5f5;
+        }
+
+        &.selected {
+          background: #e6f7ff !important;
+          font-weight: 500;
+          
+          text {
+            color: #0066cc !important;
+          }
+
+          .check-icon {
+            border-color: #0066cc !important;
+            background: #0066cc !important;
+            transform: scale(1.1) !important;
+
+            .check-mark {
+              color: #67c23a !important;
+              text-shadow: 0 0 2rpx rgba(255, 255, 255, 0.8);
+              transform: scale(1) !important;
+            }
+          }
+        }
+
+        .check-icon {
+          width: 36rpx;
+          height: 36rpx;
+          border-radius: 50%;
+          border: 2rpx solid #ddd;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+
+          .check-mark {
+            color: transparent;
+            font-size: 24rpx;
+            transform: scale(0);
+            transition: all 0.2s ease;
+          }
+        }
+      }
+    }
+
+    .start-btn {
+      width: 100%;
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      background: #ddd;
+      color: #999;
+      border-radius: 8rpx;
+      font-size: 28rpx;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &.active {
+        background: rgb(85, 244, 85);
+        color: black;
+      }
+    }
   }
 
   .review-container {
     .progress-bar {
-      background: white;
-      padding: 20rpx;
-      border-radius: 20rpx;
-      margin-bottom: 30rpx;
       display: flex;
       justify-content: space-between;
+      padding: 20rpx 0;
+      margin-bottom: 30rpx;
       font-size: 28rpx;
       color: #666;
     }
 
     .flashcard {
-      background: white;
-      border-radius: 16rpx;
-      padding: 30rpx;
-      box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+      background: rgb(198, 250, 241);
+      border-radius: 20rpx;
+      padding: 40rpx;
+      box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+      
+      .topic-tag {
+        display: inline-block;
+        padding: 6rpx 20rpx;
+        background: #f0f9eb;
+        color: #67c23a;
+        font-size: 24rpx;
+        border-radius: 6rpx;
+        margin-bottom: 20rpx;
+      }
 
       .question {
         font-size: 32rpx;
-        font-weight: bold;
-        color: #000000;
+        color: #333;
         margin-bottom: 30rpx;
-        line-height: 1.6;
+        font-weight: 500;
+        font-weight: bold;
       }
-
-      // 统一所有按钮的基础样式
-      .btn-base {
-        width: 160rpx;
-        height: 70rpx;
-        font-size: 26rpx;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        line-height: 1;
-        transition: opacity 0.2s ease;
-
-        &:active {
-          opacity: 0.8;
-        }
-      }
-
-      // 移除 answer-toggle 的样式，合并到 action-buttons
-      .action-buttons {
-        margin-top: 40rpx;
-        display: flex;
-        justify-content: center;
-        gap: 30rpx;
-
-        button {
-          @extend .btn-base;
-
-          &.toggle-btn {
-            background: #3498db;
-            color: white;
-            
-            &.hiding {
-              background: #2980b9;
-            }
-          }
-
-          &.forgot-btn {
-            background: #e74c3c;
-            color: white;
-          }
-
-          &.remembered-btn {
-            background: #2ecc71;
-            color: white;
-          }
-        }
-      }
-
+      
       .answer {
-        font-size: 28rpx;
+        font-size: 30rpx;
         color: #666;
         line-height: 1.6;
+        padding: 20rpx;
+        background: #c3d5f8;
+        border-radius: 12rpx;
+        margin-bottom: 30rpx;
         opacity: 0;
         transform: translateY(20rpx);
         transition: all 0.3s ease;
-
+        
         &.show {
           opacity: 1;
           transform: translateY(0);
+        }
+      }
+      
+      .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 20rpx;
+        
+        button {
+          flex: 1;
+          height: 80rpx;
+          font-size: 28rpx;
+          border-radius: 40rpx;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          
+          &.toggle-btn {
+            background: #7fdde3;
+            color: #666;
+            
+            &.hiding {
+              background: #e8f4ff;
+              color: #409eff;
+            }
+          }
+          
+          &.forgot-btn {
+            background: #fef0f0;
+            color: #f56c6c;
+          }
+          
+          &.remembered-btn {
+            background: #f0f9eb;
+            color: #67c23a;
+          }
+          
+          &:active {
+            opacity: 0.8;
+          }
         }
       }
     }

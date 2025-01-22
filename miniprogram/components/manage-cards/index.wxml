@@ -10,25 +10,25 @@
   <view wx:else class="cards-list">
     <view class="batch-actions">
       <view class="selection-info">
-        <checkbox-group bindchange="handleSelectAll">
+        <checkbox-group catch:change="handleSelectAll">
           <checkbox value="all" checked="{{isAllSelected}}">全选</checkbox>
         </checkbox-group>
       </view>
       <button class="batch-delete-btn {{selectedCount ? 'active' : 'disabled'}}"
               disabled="{{!selectedCount}}"
-              bindtap="handleClearSelected">
+              catch:tap="handleClearSelected">
         删除选中 ({{selectedCount}})
       </button>
     </view>
 
-    <checkbox-group bindchange="handleSelectionChange">
+    <checkbox-group catch:change="handleSelectionChange">
       <view wx:for="{{groupedCards}}" 
             wx:key="topic" 
             class="topic-group">
         <!-- 主题标题栏 -->
-        <view class="topic-header" bindtap="handleTopicToggle" data-index="{{index}}">
+        <view class="topic-header" catch:tap="handleTopicToggle" data-index="{{index}}">
           <view class="topic-title">
-            <text class="topic-arrow {{item.isExpanded ? 'expanded' : ''}}">></text>
+            <text class="topic-arrow {{item.isExpanded ? 'expanded' : ''}}"></text>
             <text>{{item.topic}}</text>
             <text class="topic-count">({{item.cards.length}})</text>
           </view>
