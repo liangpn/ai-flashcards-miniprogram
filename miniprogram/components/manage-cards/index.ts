@@ -1,8 +1,14 @@
 import { FlashCard } from '../../services/ai'
 
+interface GroupedCards {
+  topic: string;
+  cards: Array<FlashCard & { selected?: boolean }>;
+  isExpanded?: boolean;
+}
+
 Component({
   data: {
-    markedCards: [] as Array<FlashCard & { selected?: boolean }>,
+    groupedCards: [] as GroupedCards[],
     isLoading: false,
     error: '',
     selectedCount: 0,
@@ -21,12 +27,31 @@ Component({
       this.setData({ isLoading: true });
 
       try {
-        // 直接从本地存储获取已标记的卡片
+        // 从本地存储获取已标记的卡片
         const markedCards = wx.getStorageSync('markedCards') || [];
         console.log('已标记的卡片:', markedCards);
 
+        // 按 topic 分组
+        const groupedMap = new Map<string, Array<FlashCard & { selected?: boolean }>>();
+        markedCards.forEach((card: FlashCard & { selected?: boolean }) => {
+          const topic = card.topic || '未分类';
+          if (!groupedMap.has(topic)) {
+            groupedMap.set(topic, []);
+          }
+          groupedMap.get(topic)?.push({ ...card, selected: false });
+        });
+
+        // 转换为数组格式
+        const groupedCards = Array.from(groupedMap.entries()).map(([topic, cards]) => ({
+          topic,
+          cards,
+          isExpanded: false // 默认收起
+        }));
+
+        console.log('按主题分组后的卡片:', groupedCards);
+
         this.setData({
-          markedCards,
+          groupedCards,
           isLoading: false
         });
       } catch (error) {
@@ -38,78 +63,93 @@ Component({
       }
     },
 
-    // handleUnmarkCard(e: WechatMiniprogram.TouchEvent) {
-    //   const { index } = e.currentTarget.dataset;
-    //   const { markedCards } = this.data;
+    handleTopicToggle(e: WechatMiniprogram.TouchEvent) {
+      const { index } = e.currentTarget.dataset;
+      const { groupedCards } = this.data;
       
-    //   // 添加确认提示
-    //   wx.showModal({
-    //     title: '取消标记',
-    //     content: '确定要取消标记这张卡片吗？此操作不可恢复！',
-    //     confirmText: '确定',
-    //     cancelText: '取消',
-    //     success: (res) => {
-    //       if (res.confirm) {
-    //         // 用户点击确定，执行取消标记
-    //         const newMarkedCards = [...markedCards];
-    //         newMarkedCards.splice(index, 1);
-            
-    //         // 更新存储和状态
-    //         wx.setStorageSync('markedCards', newMarkedCards);
-    //         this.setData({ markedCards: newMarkedCards });
-    //       }
-    //       // 用户点击取消，不执行任何操作
-    //     }
-    //   });
-    // },
+      // 切换展开状态
+      const isExpanding = !groupedCards[index].isExpanded;
+      groupedCards[index].isExpanded = isExpanding;
+      
+      // 如果是收起操作，取消该 topic 下所有卡片的选中状态
+      if (!isExpanding) {
+        groupedCards[index].cards = groupedCards[index].cards.map(card => ({
+          ...card,
+          selected: false
+        }));
+      }
+      
+      // 计算所有选中的卡片数量
+      const selectedCount = groupedCards.reduce((count, group) => 
+        count + group.cards.filter(card => card.selected).length, 
+        0
+      );
 
-    // handleClearAllMarks() {
-    //   // 添加确认提示
-    //   wx.showModal({
-    //     title: '清除全部标记',
-    //     content: '确定要清除所有标记的卡片吗？此操作不可恢复！',
-    //     confirmText: '确定',
-    //     cancelText: '取消',
-    //     success: (res) => {
-    //       if (res.confirm) {
-    //         // 清空存储
-    //         wx.setStorageSync('markedCards', []);
-    //         // 更新状态
-    //         this.setData({ 
-    //           markedCards: [] 
-    //         });
-    //         // 提示成功
-    //         wx.showToast({
-    //           title: '已清除全部标记',
-    //           icon: 'success',
-    //           duration: 2000
-    //         });
-    //       }
-    //     }
-    //   });
-    // },
+      // 计算展开的 topic 下的总卡片数
+      const expandedCardsCount = groupedCards.reduce((count, group) => 
+        group.isExpanded ? count + group.cards.length : count, 
+        0
+      );
+
+      // 计算展开的 topic 下的选中数量
+      const selectedExpandedCount = groupedCards.reduce((count, group) => 
+        group.isExpanded ? count + group.cards.filter(card => card.selected).length : count,
+        0
+      );
+
+      // 更新全选状态（只考虑展开的 topic）
+      const isAllSelected = expandedCardsCount > 0 && selectedExpandedCount === expandedCardsCount;
+      
+      this.setData({ 
+        groupedCards,
+        selectedCount,
+        isAllSelected
+      });
+    },
 
     handleSelectionChange(e: WechatMiniprogram.CheckboxGroupChange) {
       console.log('=== 选择状态变化 ===');
-      const selectedIndexes = new Set(e.detail.value.map(v => parseInt(v)));
-      console.log('选中的索引:', Array.from(selectedIndexes));
+      const selectedValues = new Set(e.detail.value);
+      console.log('选中的值:', Array.from(selectedValues));
       
-      const markedCards = this.data.markedCards.map((card, index) => ({
-        ...card,
-        selected: selectedIndexes.has(index)
+      const groupedCards = this.data.groupedCards.map(group => ({
+        ...group,
+        cards: group.cards.map(card => ({
+          ...card,
+          selected: selectedValues.has(`${group.topic}-${card.question}`)
+        }))
       }));
       
-      const selectedCount = selectedIndexes.size;
-      const isAllSelected = selectedCount === markedCards.length;
+      // 计算选中数量
+      const selectedCount = groupedCards.reduce(
+        (count, group) => count + group.cards.filter(card => card.selected).length,
+        0
+      );
+
+      // 计算展开的 topic 下的总卡片数
+      const expandedCardsCount = groupedCards.reduce(
+        (count, group) => group.isExpanded ? count + group.cards.length : count,
+        0
+      );
+
+      // 计算展开的 topic 下的选中数量
+      const selectedExpandedCount = groupedCards.reduce(
+        (count, group) => group.isExpanded ? count + group.cards.filter(card => card.selected).length : count,
+        0
+      );
+
+      // 更新全选状态（只考虑展开的 topic）
+      const isAllSelected = expandedCardsCount > 0 && selectedExpandedCount === expandedCardsCount;
       
       console.log('更新选择状态:', {
         selectedCount,
-        isAllSelected,
-        selectedCards: markedCards.filter(card => card.selected).map(card => card.question)
+        expandedCardsCount,
+        selectedExpandedCount,
+        isAllSelected
       });
 
       this.setData({ 
-        markedCards,
+        groupedCards,
         selectedCount,
         isAllSelected
       });
@@ -120,19 +160,29 @@ Component({
       const isAllSelected = e.detail.value.includes('all');
       console.log('是否全选:', isAllSelected);
       
-      const markedCards = this.data.markedCards.map(card => ({
-        ...card,
-        selected: isAllSelected
+      const groupedCards = this.data.groupedCards.map(group => ({
+        ...group,
+        cards: group.cards.map(card => ({
+          ...card,
+          // 只有展开的 topic 下的卡片会被选中，其他都取消选中
+          selected: isAllSelected && group.isExpanded
+        }))
       }));
 
+      // 计算选中数量（包括所有选中的卡片）
+      const selectedCount = groupedCards.reduce(
+        (count, group) => count + group.cards.filter(card => card.selected).length,
+        0
+      );
+
       console.log('更新全选状态:', {
-        selectedCount: isAllSelected ? markedCards.length : 0,
-        selectedCards: isAllSelected ? markedCards.map(card => card.question) : []
+        selectedCount,
+        isAllSelected
       });
 
       this.setData({
-        markedCards,
-        selectedCount: isAllSelected ? markedCards.length : 0,
+        groupedCards,
+        selectedCount,
         isAllSelected
       });
     },
@@ -142,7 +192,6 @@ Component({
       
       console.log('=== 准备删除选中项 ===');
       console.log('选中数量:', this.data.selectedCount);
-      console.log('选中的卡片:', this.data.markedCards.filter(card => card.selected).map(card => card.question));
 
       wx.showModal({
         title: '删除选中项',
@@ -152,12 +201,21 @@ Component({
         success: (res) => {
           if (res.confirm) {
             console.log('=== 确认删除选中项 ===');
-            const newMarkedCards = this.data.markedCards.filter(card => !card.selected);
-            console.log('本地存储剩余卡片数:', newMarkedCards.length);
             
-            wx.setStorageSync('markedCards', newMarkedCards);
+            // 过滤掉选中的卡片
+            const groupedCards = this.data.groupedCards.map(group => ({
+              ...group,
+              cards: group.cards.filter(card => !card.selected)
+            })).filter(group => group.cards.length > 0); // 移除空组
+            
+            // 更新本地存储
+            const allCards = groupedCards.flatMap(group => group.cards);
+            wx.setStorageSync('markedCards', allCards);
+            
+            console.log('本地存储剩余卡片数:', allCards.length);
+            
             this.setData({
-              markedCards: newMarkedCards,
+              groupedCards,
               selectedCount: 0,
               isAllSelected: false
             });
@@ -171,6 +229,11 @@ Component({
           }
         }
       });
-    }
+    },
+
+    // 阻止事件冒泡的空方法
+    // handleGroupTap() {
+    //   // 什么都不做，仅用于阻止事件冒泡
+    // }
   }
 }); 

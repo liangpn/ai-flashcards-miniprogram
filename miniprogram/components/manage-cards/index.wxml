@@ -3,7 +3,7 @@
   
   <view wx:elif="{{error}}" class="error">{{error}}</view>
   
-  <view wx:elif="{{!markedCards.length}}" class="empty">
+  <view wx:elif="{{!groupedCards.length}}" class="empty">
     <text>还没有标记任何卡片</text>
   </view>
   
@@ -22,15 +22,32 @@
     </view>
 
     <checkbox-group bindchange="handleSelectionChange">
-      <view wx:for="{{markedCards}}" 
-            wx:key="question" 
-            class="card-item {{item.selected ? 'selected' : ''}}">
-        <view class="card-checkbox">
-          <checkbox value="{{index}}" checked="{{item.selected}}" />
+      <view wx:for="{{groupedCards}}" 
+            wx:key="topic" 
+            class="topic-group">
+        <!-- 主题标题栏 -->
+        <view class="topic-header" bindtap="handleTopicToggle" data-index="{{index}}">
+          <view class="topic-title">
+            <text class="topic-arrow {{item.isExpanded ? 'expanded' : ''}}">></text>
+            <text>{{item.topic}}</text>
+            <text class="topic-count">({{item.cards.length}})</text>
+          </view>
         </view>
-        <view class="card-content">
-          <view class="question">{{item.question}}</view>
-          <view class="answer">{{item.answer}}</view>
+        
+        <!-- 卡片列表，使用动画控制显示/隐藏 -->
+        <view class="card-list {{item.isExpanded ? 'expanded' : ''}}">
+          <view wx:for="{{item.cards}}" 
+                wx:key="question"
+                wx:for-item="card"
+                class="card-item {{card.selected ? 'selected' : ''}}">
+            <view class="card-checkbox">
+              <checkbox value="{{item.topic}}-{{card.question}}" checked="{{card.selected}}" />
+            </view>
+            <view class="card-content">
+              <view class="question">{{card.question}}</view>
+              <view class="answer">{{card.answer}}</view>
+            </view>
+          </view>
         </view>
       </view>
     </checkbox-group>

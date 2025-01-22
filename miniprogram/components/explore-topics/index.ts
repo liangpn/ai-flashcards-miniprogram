@@ -33,11 +33,11 @@ Component({
 
       try {
         // 真实请求
-        const topics = await AIService.getTopics(this.data.keyword);
+        // const topics = await AIService.getTopics(this.data.keyword);
         
         // 使用模拟数据替代 AI 请求
-        // console.log('使用模拟主题数据...');
-        // const topics = ['AI', '编程', '前端', '后端', '数据库'];
+        console.log('使用模拟主题数据...');
+        const topics = ['AI', '编程', '前端', '后端', '数据库'];
         
         this.setData({ topics });
       } catch (error) {

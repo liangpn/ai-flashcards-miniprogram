@@ -36,7 +36,7 @@
   </view>
 
   <!-- 内容区域 -->
-  <view class="content-area">
+  <view class="content-area" catch:tap>
     <block wx:if="{{currentTab === 'custom'}}">
       <custom-content />
     </block>
