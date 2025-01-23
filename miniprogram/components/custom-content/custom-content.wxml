@@ -22,7 +22,7 @@
       />
     </view>
 
-    <view class="difficulty-selector" catch:tap="handleDifficultyChange">
+    <view class="difficulty-selector">
       <view class="difficulty-label">难度选择:</view>
       <view class="difficulty-options">
         <view 
@@ -30,6 +30,7 @@
           wx:key="value"
           class="difficulty-option {{difficulty === item.value ? 'active' : ''}}"
           data-value="{{item.value}}"
+          catch:tap="handleDifficultyChange"
         >
           {{item.label}}
         </view>

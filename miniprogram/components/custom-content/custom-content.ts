@@ -43,9 +43,14 @@ Component({
     },
 
     handleDifficultyChange(e: WechatMiniprogram.TouchEvent) {
-      const difficulty = e.currentTarget.dataset.value;
-      console.log('难度更新:', difficulty);
-      this.setData({ difficulty });
+      const { value } = e.currentTarget.dataset;
+      console.log('难度选择更新:', value);
+      if (value) {  // 添加值的检查
+        this.setData({ 
+          difficulty: value,
+          error: ''  // 清除可能的错误信息
+        });
+      }
     },
 
     handleClose() {
