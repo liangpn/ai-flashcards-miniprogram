@@ -1,6 +1,4 @@
 {
   "component": true,
-  "usingComponents": {
-    "settings-icon": "../settings-icon/settings-icon"
-  }
+  "usingComponents": {}
 } 
