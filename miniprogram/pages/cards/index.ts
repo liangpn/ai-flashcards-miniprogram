@@ -26,21 +26,20 @@ Component({
 
     handleBack() {
       console.log('cards page: handleBack called');
-      const pages = getCurrentPages();
-      console.log('current pages stack:', pages.length);
-      
-      if (pages.length > 1) {
-        wx.navigateBack({
-          delta: 1,
-          success: () => {
-            console.log('cards page: navigation success, resetting state');
-            this.resetState();
-          },
-          fail: (error) => {
-            console.error('cards page: navigation failed', error);
-          }
-        });
-      }
+      wx.redirectTo({
+        url: '/pages/index/index',
+        success: () => {
+          console.log('cards page: navigation success, resetting state');
+          this.resetState();
+        },
+        fail: (error) => {
+          console.error('cards page: navigation failed', error);
+          wx.showToast({
+            title: '返回失败',
+            icon: 'error'
+          });
+        }
+      });
     },
 
     switchTab(e: WechatMiniprogram.TouchEvent) {

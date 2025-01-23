@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <navigation-bar title="知学" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<view class="container">
+<view class="index-container">
   <view class="button-container">
     <button class="icon-button" bindtap="navigateToCards">
       <image class="icon" src="../../assets/tabbar/cards_entrance.png" mode="aspectFit"></image>

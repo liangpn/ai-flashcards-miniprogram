@@ -13,7 +13,7 @@ Page({
   },
 
   navigateToCards() {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '/pages/cards/index',
       fail: (error) => {
         console.error('跳转失败:', error);

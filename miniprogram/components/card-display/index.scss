@@ -158,4 +158,35 @@
         }
       }
     }
-  } 
+  }
+
+.card-display {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+  height: 100%;
+  
+  .close-btn {
+    position: absolute;
+    top: 20rpx;
+    right: 20rpx;
+    z-index: 10;
+    padding: 10rpx;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .card-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 20rpx;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+} 
