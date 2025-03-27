@@ -24,7 +24,7 @@
     <view class="dialog-header">
       <text>设置</text>
     </view>
-    <view class="dialog-body">
+    <view wx:if="{{showSettingsDialog}}" class="dialog-body">
       <text class="label">DeepSeek API Key</text>
       <view class="input-wrapper">
         <input 
